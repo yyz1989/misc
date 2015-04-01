@@ -1,10 +1,10 @@
-query	test1.sparql	SELECT
-query	test2.sparql	SELECT
-query	test3.sparql	SELECT
-query	test4.sparql	SELECT
-query	test5.sparql	SELECT
-query	test6.sparql	SELECT
-query	test7.sparql	SELECT
-query	test8.sparql	SELECT
-query	test9.sparql	SELECT
-query	test10.sparql	SELECT
+query	test1.sparql	TEST1: administrative level
+query	test2.sparql	TEST2: Leuven municipality without aggregation
+query	test3.sparql	TEST3: first 320 entries in all municipalities without aggregation
+query	test4.sparql	TEST4: all municipalities without aggregation
+query	test5.sparql	TEST5: Leuven district without aggregation
+query	test6.sparql	TEST6: all districts without aggregation
+query	test7.sparql	TEST7: Vlaams-Brabant province without aggregation
+query	test8.sparql	TEST8: all provinces without aggregation
+query	test9.sparql	TEST9: all provinces with aggregation
+query	test10.sparql	TEST10: all provinces with aggregation and count
