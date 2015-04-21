@@ -1,0 +1,3 @@
+#exhaustive list of properties used in the dataset
+
+SELECT DISTINCT ?p { ?s ?p ?o }

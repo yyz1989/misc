@@ -1,0 +1,45 @@
+# Test 7: Query the unemployed population in province Vlaams-Brabant, given a selection criteria.
+
+prefix dct: <http://purl.org/dc/terms/>
+prefix qb: <http://purl.org/linked-data/cube#>
+prefix sdmx-measure: <http://purl.org/linked-data/sdmx/2009/measure#>
+prefix sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#>
+prefix skos: <http://www.w3.org/2004/02/skos/core#>
+prefix xkos: <http://rdf-vocabulary.ddialliance.org/xkos#>
+prefix statsvl: <http://id.vlaanderen.be/statistieken/def#>
+
+SELECT DISTINCT ?prov ?timePeriod (sum(?num) as ?sum)
+WHERE{
+  ?obs qb:dataSet <http://id.vlaanderen.be/statistieken/dq/kubus-studieniveau-nwwz#id>;
+  statsvl:refArea ?refAreaId;
+  statsvl:educationLev ?eduLevId;
+  statsvl:timePeriod ?timePeriodId;
+  sdmx-dimension:sex ?sexId;
+  statsvl:leeftijdsgroep ?ageId;
+  statsvl:aantal ?num.
+  ?refAreaId skos:prefLabel ?_refArea.
+  FILTER langMatches(lang(?_refArea), "nl")
+  ?eduLevId skos:prefLabel ?_eduLev.
+  FILTER langMatches(lang(?_eduLev), "nl")
+  ?timePeriodId skos:prefLabel ?_timePeriod.
+  ?sexId skos:prefLabel ?_sex.
+  FILTER langMatches(lang(?_sex), "nl")
+  ?ageId skos:prefLabel ?_age.
+  BIND (str(?_timePeriod) as ?timePeriod)
+  BIND (str(?_refArea) as ?refArea)
+  BIND (str(?_eduLev) as ?eduLev)
+  BIND (str(?_age) as ?age)
+  BIND (str(?_sex) as ?sex)
+  FILTER (?sex = "Vrouwelijk" && ?age = "00-24" && ?eduLev = "laaggeschoold")
+  ?refAreaId xkos:isPartOf ?distId. 
+  ?distId skos:prefLabel ?_dist.
+  FILTER langMatches(lang(?_dist), "nl")
+  BIND (str(?_dist) as ?dist)
+  ?distId xkos:isPartOf  ?provId.
+  ?provId skos:prefLabel ?_prov.
+  FILTER langMatches(lang(?_prov), "nl")
+  BIND (str(?_prov) as ?prov)     
+  FILTER (?prov = "Provincie Vlaams-Brabant")
+}
+GROUP BY ?prov ?timePeriod
+ORDER BY ?prov ?timePeriod

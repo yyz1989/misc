@@ -1,0 +1,3 @@
+#table: class vs. total number of instances of the class 
+
+SELECT  ?class (COUNT(?s) AS ?count_instances ) { ?s a ?class } GROUP BY ?class ORDER BY ?count

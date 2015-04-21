@@ -1,0 +1,20 @@
+#total number of triples
+#total number of entities (new)
+#total number of distinct resource URIs (deprecated)
+#total number of distinct classes // the number of distinct resources occuring as objects of rdf:type (new)
+#total number of distinct properties (new)
+#total number of distinct subject nodes
+#total number of distinct object nodes
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT * 
+WHERE {
+    {SELECT (COUNT(*) AS ?no_triples) { ?s ?p ?o }}
+    {SELECT (COUNT(distinct ?s) AS ?no_entities) { ?s a [] }}
+    {SELECT (COUNT(DISTINCT ?s ) AS ?no_uris) { { ?s ?p ?o  } UNION { ?o ?p ?s } FILTER(!isBlank(?s) && !isLiteral(?s)) }}
+    {SELECT (COUNT(distinct ?o) AS ?no_classes) { ?s rdf:type ?o }}
+    {SELECT (count(distinct ?p) AS ?no_predicates) { ?s ?p ?o }}
+    {SELECT (COUNT(DISTINCT ?s ) AS ?no_subjects) {  ?s ?p ?o   }}
+    {SELECT (COUNT(DISTINCT ?o ) AS ?no_objects) {  ?s ?p ?o  filter(!isLiteral(?o)) }}
+}

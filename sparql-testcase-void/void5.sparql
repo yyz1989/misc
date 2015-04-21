@@ -1,0 +1,9 @@
+#table: property vs. total number of triples using the property
+#table: property vs. total number of distinct subjects in triples using the prop (??)
+#table: property vs. total number of distinct objects in triples using the prop (??) 
+
+SELECT * WHERE {
+  {SELECT  ?p (COUNT(?s) AS ?count_triples ) { ?s ?p ?o } GROUP BY ?p ORDER BY ?count_triples}
+    {SELECT  ?p (COUNT(DISTINCT ?s ) AS ?count_subjects ) { ?s ?p ?o } GROUP BY ?p ORDER BY ?count_subjects}
+    {SELECT  ?p (COUNT(DISTINCT ?o ) AS ?count_objects ) { ?s ?p ?o } GROUP BY ?p ORDER BY ?count_objects}
+}
