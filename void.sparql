@@ -1,0 +1,31 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT * 
+WHERE {
+    {SELECT (COUNT(*) AS ?no_triples) { ?s ?p ?o }}
+    {SELECT (COUNT(distinct ?s) AS ?no_entities) { ?s a [] }}
+    {SELECT (COUNT(DISTINCT ?s ) AS ?no_uris) { { ?s ?p ?o  } UNION { ?o ?p ?s } FILTER(!isBlank(?s) && !isLiteral(?s)) }}
+    {SELECT (COUNT(distinct ?o) AS ?no_classes) { ?s rdf:type ?o }}
+    {SELECT (count(distinct ?p) AS ?no_predicates) { ?s ?p ?o }}
+    {SELECT (COUNT(DISTINCT ?s ) AS ?no_subjects) {  ?s ?p ?o   }}
+    {SELECT (COUNT(DISTINCT ?o ) AS ?no_objects) {  ?s ?p ?o  filter(!isLiteral(?o)) }}
+    {SELECT DISTINCT ?type { ?s a ?type }}
+    {SELECT DISTINCT ?p { ?s ?p ?o }}
+    {SELECT  ?class (COUNT(?s) AS ?count_instances ) { ?s a ?class } GROUP BY ?class ORDER BY ?count_instances}
+    {SELECT  ?p (COUNT(?s) AS ?count_triples ) { ?s ?p ?o } GROUP BY ?p ORDER BY ?count_triples}
+    {SELECT  ?p (COUNT(DISTINCT ?s ) AS ?count_subjects ) { ?s ?p ?o } GROUP BY ?p ORDER BY ?count_subjects}
+    {SELECT  ?p (COUNT(DISTINCT ?o ) AS ?count_objects ) { ?s ?p ?o } GROUP BY ?p ORDER BY ?count_objects}
+    {SELECT DISTINCT ?domainName 
+        WHERE  {
+        {
+          ?uri ?p ?o .
+        } UNION {
+          ?sub ?p ?uri .
+          FILTER(isIRI(?uri))
+        }
+        BIND (str(?uri) as ?s)
+        FILTER (STRSTARTS(?s, "http://"))
+        BIND (IRI(CONCAT("http://", STRBEFORE(SUBSTR(?s, 8), "/"))) AS ?domainName)
+        }
+    }
+}
